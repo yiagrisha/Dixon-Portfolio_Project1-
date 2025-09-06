@@ -1,0 +1,129 @@
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: #1e1a20;
+  font-size: 16px;
+
+  z-index: 0;
+}
+body {
+  font-family: 'Montserrat';
+}
+
+h1 {
+  font-size: 3em;
+}
+h2 {
+  font-size: 3em;
+  opacity: 50%;
+}
+p {
+  font-size: 2em;
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  inset: 0;
+  background: black;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 2s ease; /* плавный фейд */
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.title {
+  font-size: 10em;
+  opacity: 0;
+  transition: opacity 2s ease 1s; /* появление позже */
+}
+.title.visible {
+  opacity: 1;
+}
+
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+
+  z-index: 1;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+  position: relative;
+  color: #ffeded;
+
+  padding-left: 10%;
+  padding-right: 10%;
+
+  h2 {
+    text-align: center;
+  }
+
+  p {
+    font-size: 1.4em;
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+#intro {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  z-index: 0;
+
+  h1 {
+    font-size: 10em;
+  }
+}
+#name {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  z-index: 2;
+}
+
+.cards {
+  flex-direction: row;
+  font-size: 0.7em;
+
+  gap: 2em;
+
+  p {
+    background-color: blue;
+    padding: 0.5em;
+
+    border-radius: 0.5em;
+  }
+}
