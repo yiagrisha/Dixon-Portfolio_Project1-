@@ -105,24 +105,6 @@ Objects
       cassettePlayerX.position.set(0, -5, 0)
       scene.add(cassettePlayerX)
 
-      const targetQuat = new THREE.Quaternion().setFromEuler(
-         new THREE.Euler(0.7, -0.5, 0, "XYZ")
-      )
-      const timeLine = gsap.timeline({
-         scrollTrigger: {
-            trigger: '.container',
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: true,
-            markers: true
-         }
-      })
-      timeLine.to(cassettePlayerX.position, { y: -2.3, z: 1 })
-               .to(cassettePlayerX.position, { x: 1, y: '-=3', z: 0})
-               .to(cassettePlayerX.rotation, { x: '+=0.7' }, '<')
-               .to(cassettePlayerY.rotation, { y: -0.5 }, '<')
-
-
       gsap.fromTo(
          cassettePlayerX.position, 
          { y: -5 },
@@ -136,7 +118,24 @@ Objects
                document.body.style.overflow = 'auto'
             }
          }
-      )  
+      )
+
+      const timeLine = gsap.timeline({
+         scrollTrigger: {
+            trigger: '.container',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: true,
+            markers: true
+         }
+      })
+      timeLine.to(cassettePlayerX.position, { y: -2.3, z: 1 })
+              .to(cassettePlayerX.position, { x: 1, y: '-=3', z: 0})
+              .to(cassettePlayerX.rotation, { x: '+=0.7' }, '<')
+              .to(cassettePlayerY.rotation, { y: -0.5 }, '<')
+              .to(cassettePlayerX, { autoAlpha: 0 }, '<')
+
+      
    })
 
    /* function nameScrollAnimation() {
