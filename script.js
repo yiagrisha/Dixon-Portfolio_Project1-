@@ -27,7 +27,7 @@ Debug
 /* 
 LOADING 
 */
-   let cassettePlayer = null
+   let cassettePlayerX = null
    let introDone = false
    const objectsDistance = 3
 
@@ -93,50 +93,87 @@ Objects
 
    
    gltfLoader.load('./CassetePlayer/cassette_player_1k.gltf', function(gltf) {
-         cassettePlayer = new THREE.Group()
-         cassettePlayer.add(gltf.scene)
+      cassettePlayerX = new THREE.Group()
+      const cassettePlayerY = new THREE.Group()
+      cassettePlayerX.add(cassettePlayerY)
+      cassettePlayerY.add(gltf.scene)
 
-         gltf.scene.scale.set(10, 10, 10)
-         gltf.scene.rotation.set(-0.7, 0, 0)
-         gltf.scene.position.set(0, -1.4, 0)
+      gltf.scene.scale.set(10, 10, 10)
+      cassettePlayerX.rotation.set(-0.7, 0, 0)
+      gltf.scene.position.set(0, -1, 0)
 
-         cassettePlayer.position.set(0, -5, 0)
-         scene.add(cassettePlayer)
+      cassettePlayerX.position.set(0, -5, 0)
+      scene.add(cassettePlayerX)
 
-         gsap.fromTo(
-            cassettePlayer.position, 
-            { y: -5 },
-            {
-               y: 0,        // финальная позиция
-               duration: 3, // 3 секунды
-               ease: "power2.out",
-               delay: 1.5,   // подождать пока чёрный экран исчезнет
-               onComplete: function() { 
-                  introDone = true 
-                  document.body.style.overflow = 'auto'
+      const targetQuat = new THREE.Quaternion().setFromEuler(
+         new THREE.Euler(0.7, -0.5, 0, "XYZ")
+      )
+      const timeLine = gsap.timeline({
+         scrollTrigger: {
+            trigger: '.container',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: true,
+            markers: true
+         }
+      })
+      timeLine.to(cassettePlayerX.position, { y: -2.3, z: 1 })
+               .to(cassettePlayerX.position, { x: 1, y: '-=3', z: 0})
+               .to(cassettePlayerX.rotation, { x: '+=0.7' }, '<')
+               .to(cassettePlayerY.rotation, { y: -0.5 }, '<')
 
-                  nameScrollAnimation()
-               }
+
+      gsap.fromTo(
+         cassettePlayerX.position, 
+         { y: -5 },
+         {
+            y: 0,        // финальная позиция
+            duration: 1, // 3 секунды
+            ease: "power2.out",
+            delay: 0,   // подождать пока чёрный экран исчезнет
+            onComplete: function() { 
+               introDone = true 
+               document.body.style.overflow = 'auto'
             }
-         )  
-      }
-   )
+         }
+      )  
+   })
 
-   function nameScrollAnimation() {
-      gsap.to(cassettePlayer.position, {
-         y: -2,
-         z: 1,
+   /* function nameScrollAnimation() {
+      gsap.to(cassettePlayerX.position, {
+         y: -2.4,
+         z: 1.5,
          duration: 1,
          ease: 'power2.out',
          scrollTrigger: {
             trigger: '#name',
+            start: 'top center',
+            end: 'center center',
+            scrub: true,
+            markers: true,
+            onComplete: function() {
+               stillScrollAnimation()
+            }
+         }
+      })
+   }
+
+   function stillScrollAnimation() {
+      gsap.to(cassettePlayerX.position, {
+         x: 1,
+         y: -2.4,
+         z: 1.5,
+         duration: 1,
+         ease: 'power2.out',
+         scrollTrigger: {
+            trigger: '#still',
             start: 'top center',
             end: 'bottom center',
             scrub: true,
             markers: true
          }
       })
-   }
+   } */
    
 /* 
 Light 
@@ -215,7 +252,7 @@ Animation
       previousTime = elapsedTime
 
       //Camera
-      camera.position.y = -scrollY / sizes.height * objectsDistance
+      camera.position.y = -scrollY / sizes.height * objectsDistance 
 
       //const parallaxX = cursor.x
       //const parallaxY = -cursor.y
