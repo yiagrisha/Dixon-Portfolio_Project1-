@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Montserrat';
-  src: url('./Fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+  src: url('./Fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
 }
 
 * {
@@ -13,24 +13,36 @@ html {
   font-size: 16px;
 
   z-index: 0;
+
+  overflow-x: hidden;
+
+  --mobile-viewport-min: 320;
+  --mobile-desktop-breakpoint: 768;
+  --desktop-viewport-max: 1500;
+
+  --mobile-font-size-min: 12;
+  --mobile-font-size-max: 16;
+  
+  --desktop-font-size-min: 16;
+  --desktop-font-size-max: 24;
+
+  font-size: calc(var(--mobile-font-size-min) * 1px);
+
+  @media screen and (min-width: 320px) {    
+    font-size: calc(var(--mobile-font-size-min) * 1px + (var(--mobile-font-size-max) - var(--mobile-font-size-min)) * ((100vw - var(--mobile-viewport-min) * 1px) / (var(--mobile-desktop-breakpoint) - var(--mobile-viewport-min))));
+  }
+
+  @media screen and (min-width: 768px) {    
+    font-size: calc(var(--desktop-font-size-min) * 1px + (var(--desktop-font-size-max) - var(--desktop-font-size-min)) * ((100vw - var(--mobile-desktop-breakpoint) * 1px) / (var(--desktop-viewport-max) - var(--mobile-desktop-breakpoint))));
+  }
+
+  @media screen and (min-width: 1500px) {    
+    font-size: calc(var(--desktop-font-size-max) * 1px);
+  }
 }
 body {
   font-family: 'Montserrat';
 }
-
-h1 {
-  font-size: 3em;
-  font-weight: 400;
-}
-h2 {
-  font-size: 3em;
-  font-weight: 400;
-}
-p {
-  font-size: 2em;
-  font-weight: 400;
-}
-
 
 .overlay {
   position: fixed;
@@ -44,19 +56,20 @@ p {
   z-index: 1000;
   opacity: 0;
   transition: opacity 2s ease; /* плавный фейд */
-}
 
-.overlay.hidden {
-  opacity: 0;
-  pointer-events: none;
+  &.hidden {
+    opacity: 0;
+    pointer-events: none; 
+  }
 }
 .title {
   font-size: 10em;
   opacity: 1;
   transition: opacity 2s ease 1s; /* появление позже */
-}
-.title.visible {
-  opacity: 1;
+
+  &.visible {
+    opacity: 1;
+  }
 }
 
 .webgl {
@@ -67,6 +80,7 @@ p {
 
   z-index: 1;
 }
+
 
 section {
   display: flex;
@@ -79,10 +93,15 @@ section {
   position: relative;
   color: #ffeded;
 
-  padding-left: 10%;
-  padding-right: 10%;
+  padding: 1em 2em 1em 2em;
+
+  @media screen and (max-width: 768px) {
+    padding: 1em 0.2em 1em 0.2em;
+  }
 
   h2 {
+    width: 100%;
+    display: block;
     text-align: center;
   }
 
@@ -105,9 +124,14 @@ section {
 
   h1 {
     font-size: 10em;
-    font-weight: 400;
+    font-weight: 500;
+
+    @media screen and (max-width: 768px) {
+      font-size: 6em;
+    }
   }
 }
+
 #name {
   display: flex;
   flex-direction: column;
@@ -117,31 +141,32 @@ section {
   z-index: 2;
   
   h2 {
-    font-weight: 400;
+    font-weight: 600;
     font-size: 4em;
-    /* 1. Градиент фона */
+    line-height: 0.9em;
+    
     background: linear-gradient(135deg, #FB9032, #FFD14F, #F7C874);
 
-    /* 2. Обрезка фона под текст */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    /* Для других браузеров можно добавить */
     background-clip: text;
     color: transparent;
     
     opacity: 1;
   }
+
   p {
-    font-weight: bold;
-    /* 1. Градиент фона */
+    font-size: 1.6em;
+    font-weight: 600;
+
+    padding-bottom: 0.5em;
+
     background: linear-gradient(90deg, #FB9032, #FFD14F, #F7C874);
 
-    /* 2. Обрезка фона под текст */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    /* Для других браузеров можно добавить */
     background-clip: text;
     color: transparent;
   }
@@ -149,16 +174,117 @@ section {
 
 #still {
   width: 20em;
+  z-index: 2;
+
+  @media screen and (max-width: 768px) {
+    width: 16em;
+  }
+
   h2{
+    font-size: 3em;
     text-align: left;
+    padding-bottom: 0.5em;
   }
 
   p {
     text-align: left;
+
+    b {
+      background: linear-gradient(90deg, #FB9032, #FFD14F, #F7C874);
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      background-clip: text;
+      color: transparent;
+    }
   }
 }
 
-.cards {
+
+
+#warmth {
+  height: 150vh;
+  z-index: 2;
+  
+  h2{
+    font-size: 3em;
+    text-align: left;
+    padding-bottom: 0.5em;
+  }
+  p {
+    text-align: left;
+    margin-bottom: 2em;
+  }
+
+  .scroll-row {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    
+    border-radius: 2em;
+
+
+    figure {
+      width: 25em;
+      height: 25em;
+      border-radius: 2em;
+
+      flex-shrink: 0;
+
+      overflow: hidden;
+      background-color: #2b282c;
+
+      img {
+        height: 100%;
+      }
+    }
+  }
+}
+
+#warmth .scroll-row {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE/Edge */
+}
+#warmth .scroll-row::-webkit-scrollbar {
+  display: none;                /* Chrome/Safari */
+}
+
+#warmth .scroll-buttons-container {
+  display: block;
+  width: 100%;
+  
+}
+
+#warmth .scroll-buttons-container .scroll-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  gap: 2em;
+  margin-top: 1em;
+}
+
+#warmth .scroll-buttons button {
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  border: none;
+  background: #FFD14F;
+  color: #1e1a20;
+  font-size: 1.4em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+#warmth .scroll-buttons button:hover {
+  background: #FB9032;
+}
+
+
+#cards {
   flex-direction: row;
   font-size: 0.7em;
   height: 20em;
@@ -185,7 +311,7 @@ section {
 
       h3 {
         font-size: 2em;
-        font-weight: 400;
+        font-weight: 600;
   
         position: absolute;
         top: 0.5em;
@@ -201,6 +327,48 @@ section {
         bottom: 1.5em;
         left: 0.7em;
       }
+    }
+  }
+}
+
+
+#features {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: center;
+
+  gap: 2em;
+  z-index: 2;
+
+  
+
+  div {
+    flex: 1 1 200px;
+    overflow: visible;
+    text-align: center;
+    justify-content: center;
+
+    h3 {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.5em;
+
+      background: linear-gradient(90deg, #FB9032, #FFD14F, #F7C874);
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      background-clip: text;
+      color: transparent;
+    }
+
+    p {
+      justify-content: center;
+      text-align: center;
+      font-size: 1em;
+      overflow: visible;
     }
   }
 }
