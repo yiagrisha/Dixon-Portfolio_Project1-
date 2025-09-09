@@ -11,26 +11,8 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 if ('scrollRestoration' in history) {
    history.scrollRestoration = 'manual'
 }
-
 const canvas = document.querySelector('canvas.webgl')
 document.body.style.overflow = 'hidden'
-
-/* 
-Script 
-*/
-      const scrollContainer = document.querySelector('#warmth .scroll-row');
-      const leftBtn = document.querySelector('#warmth .scroll-left');
-      const rightBtn = document.querySelector('#warmth .scroll-right');
-
-      if (scrollContainer && leftBtn && rightBtn) {
-      leftBtn.onclick = () => {
-         scrollContainer.scrollBy({left: -300, behavior: 'smooth'});
-      };
-      rightBtn.onclick = () => {
-         scrollContainer.scrollBy({left: 300, behavior: 'smooth'});
-      };
-      }
-         
 
 /* 
 Debug 
@@ -44,6 +26,59 @@ Debug
       material.color.set(parameters.materialColor)
       particlesMaterial.color.set(parameters.materialColor)
    })
+
+/* 
+Script 
+*/
+      const scrollContainer = document.querySelector('#warmth .scroll-row');
+      const leftBtn = document.querySelector('#warmth .scroll-left');
+      const rightBtn = document.querySelector('#warmth .scroll-right');
+
+      function updateScrollButtons() {
+         if (!scrollContainer || !leftBtn || !rightBtn) return;
+         // Дизейблим левую кнопку, если скролл влево невозможен
+         leftBtn.disabled = scrollContainer.scrollLeft <= 0;
+         // Дизейблим правую кнопку, если скролл вправо невозможен
+         rightBtn.disabled = scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 1;
+      }
+
+      // Обработчики
+      if (scrollContainer && leftBtn && rightBtn) {
+         leftBtn.onclick = () => {
+            scrollContainer.scrollBy({left: -300, behavior: 'smooth'});
+         };
+         rightBtn.onclick = () => {
+            scrollContainer.scrollBy({left: 300, behavior: 'smooth'});
+         };
+         // Обновлять состояние кнопок при скролле и изменении размера окна
+         scrollContainer.addEventListener('scroll', updateScrollButtons);
+         window.addEventListener('resize', updateScrollButtons);
+         // Инициализация
+         updateScrollButtons();
+      }
+
+      const scrollPoints = document.querySelectorAll('#scroll-points li')
+
+      function updateActiveScrollPoint() {
+      const center = window.innerHeight / 2
+      let activeIdx = -1
+
+      scrollPoints.forEach((li, idx) => {
+         const rect = li.getBoundingClientRect()
+         if (rect.top <= center && rect.bottom >= center) {
+            activeIdx = idx
+         }
+      });
+
+      scrollPoints.forEach((li, idx) => {
+         li.classList.toggle('active', idx === activeIdx)
+      });
+      }
+      window.addEventListener('scroll', updateActiveScrollPoint)
+      window.addEventListener('resize', updateActiveScrollPoint)
+      updateActiveScrollPoint()
+         
+
 
 /* 
 LOADING 
@@ -191,7 +226,7 @@ Objects
          start: 'top center',
          onEnter: function() {
             if (cassettePlayerX) {
-               gsap.set(cassettePlayerX.position, { x: -2, y: -16.8, z: 1})
+               gsap.set(cassettePlayerX.position, { x: -1, y: -16.8, z: 1})
                gsap.set(cassettePlayerY.rotation, { x: 0, y: 0.5, z: 0})
                gsap.set(cassettePlayerX.rotation, { x: 0, y: 0, z: Math.PI / 2}, '<')
             }
@@ -212,11 +247,16 @@ Objects
             start: 'top top',
             end: 'bottom bottom',
             scrub: true,
-            markers: true
+            markers: true,
+            onLeave: function() {
+               if (cassettePlayerX) {
+                  gsap.set(cassettePlayerY.rotation, { x: 0, y: 0, z: 0})
+                  gsap.set(cassettePlayerX.rotation, { x: 0, y: 0, z: 0}, '<')
+               }
+            }
          }
-      }).to(cassettePlayerX.position, { x: 4 })
+      }).to(cassettePlayerX.position, { x: 1 })
         .to(cassettePlayerX.position, { y: '-=6'})
-        .to(cassettePlayerX.rotation, { z: -Math.PI / 2}, '<')
         .to(cassettePlayerX.position, { x: 2})
       
    })

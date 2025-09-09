@@ -146,6 +146,7 @@ section {
     line-height: 0.9em;
     
     background: linear-gradient(135deg, #FB9032, #FFD14F, #F7C874);
+    
 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -190,7 +191,7 @@ section {
     text-align: left;
 
     b {
-      background: linear-gradient(90deg, #FB9032, #FFD14F, #F7C874);
+      background: linear-gradient(135deg, #FD9700, #ffb921, #ff48b9, #93efff);
 
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -263,26 +264,91 @@ section {
   display: flex;
   width: 100%;
   justify-content: flex-end;
-  gap: 2em;
+  gap: 1em;
   margin-top: 1em;
 }
 
 #warmth .scroll-buttons button {
-  width: 2em;
-  height: 2em;
+  width: 1.7em;
+  height: 1.7em;
   border-radius: 50%;
   border: none;
-  background: #FFD14F;
-  color: #1e1a20;
+  background: #444444;
+  color: #ffffff;
   font-size: 1.4em;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  transition: background 0.2s;
+  opacity: 1;
+  transition: background 0.3s, opacity 0.3s;
+
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+
+  svg {
+    height: 45%;
+    width: 45%;
+    padding-left: 0.2em;
+
+    stroke: #e7d4d4;
+    stroke-width: 2px;
+  }
+
+  &:first-child svg {
+    transform: rotate(180deg);
+  }
 }
 #warmth .scroll-buttons button:hover {
-  background: #FB9032;
+  svg {
+    stroke: #ffffff;
+  }
+}
+#warmth .scroll-buttons button:disabled {
+  opacity: 0.4;
+  cursor: auto;
+  background: #888;
+
+  
 }
 
+#scroll-points {
+  li {
+    display: inline;
+    text-align: left;
+    font-size: 2.8em;
+    font-weight: 700;
+    opacity: 0.2;
+
+    transition: opacity 0.3s ease;
+
+    &.active {
+      display: inline;
+      text-align: left;
+      font-size: 2.8em;
+      font-weight: 700;
+      opacity: 1;
+    }
+
+    @media screen and (max-width: 768px) {
+      font-size: 2em;
+      &.active {
+        font-size: 2em;
+      }
+    }
+
+    b {
+      font-weight: 700;
+      background: linear-gradient(135deg, #FD9700, #ffb921, #ff48b9);
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      background-clip: text;
+      color: transparent;
+    }
+  }
+}
 
 #cards {
   flex-direction: row;
@@ -331,6 +397,13 @@ section {
   }
 }
 
+#ritual {
+
+  h2{
+    font-size: 3em;
+    padding-bottom: 0.5em;
+  }
+}
 
 #features {
   display: flex;
