@@ -120,34 +120,38 @@ Objects
 
       cassettePlayerX.add(cassettePlayerY)
       cassettePlayerY.add(gltf.scene)
+      gltf.scene.position.set(-0.005, 0, -0.025)
 
       if (cassettePlayerX) {
          const scaleFactor = baseHeight / sizes.height * 8
          cassettePlayerX.scale.set(scaleFactor, scaleFactor, scaleFactor)
       }
 
-      gsap.set(cassettePlayerX, { 
+      gsap.set(cassettePlayerX.position, { 
          x: 0,
          y: -5,
-         z: -1
+         z: 0
       })
       gsap.set(cassettePlayerX.rotation, { x: -0.7, y: 0, z: 0 })
       gsap.set(cassettePlayerY.rotation, { x: 0, y: 0, z: 0 })
       scene.add(cassettePlayerX)
 
-      gsap.fromTo(
-         cassettePlayerX.position, 
-         { y: -5 }, {
-            y: -1.5,
-            duration: 1,
-            ease: "power2.out",
-            delay: 0,
-            onComplete: function() { 
-               introDone = true 
-               document.body.style.overflow = 'auto'
+      setTimeout(() => {
+         gsap.fromTo(
+            cassettePlayerX.position, 
+            { y: -5 }, {
+               y: -0.8,
+               duration: 1,
+               ease: "power2.out",
+               delay: 0,
+               onComplete: function() { 
+                  introDone = true 
+                  document.body.style.overflow = 'auto'
+               }
             }
-         }
-      )
+         )
+
+      }, 3000)
 
       setTimeout(() => {
          window.scrollTo(0, 0)
@@ -163,23 +167,39 @@ Objects
             start: 'top top',
             end: 'bottom bottom',
             scrub: true,
-            markers: true
+            markers: true,
+            onEnterBack: function() {
+               if (cassettePlayerX) {
+                  gsap.set(cassettePlayerX.position, { x: 0, y: 4, z: 1 })
+                  gsap.set(cassettePlayerY.rotation, { x: 0, y: 0, z: 0 })
+                  gsap.set(cassettePlayerX.rotation, { x: 0, y: 0, z: 0 })
+               }
+            }
          }
       }).to(cassettePlayerX.position, { y: 0, z: '+=1' })
       
-        .to(cassettePlayerX.position, { z: '-=4' })
+        .to(cassettePlayerX.position, { z: 1 })
+
+        .to(cassettePlayerX.position, { z: 1 })
         .to(cassettePlayerX.rotation, { x: '+=0.7' }, '<')
 
-        .to(cassettePlayerY.rotation, { y: Math.PI/2 })
+        .to(cassettePlayerY.rotation, { y: Math.PI * 2 / 8})
 
-        .to(cassettePlayerY.rotation, { y: Math.PI })
+        .to(cassettePlayerY.rotation, { y: (Math.PI * 2 / 8) * 2 })
 
-        .to(cassettePlayerY.rotation, { y: Math.PI/2 + Math.PI })
+        .to(cassettePlayerY.rotation, { y: (Math.PI * 2 / 8) * 3 })
+
+        .to(cassettePlayerY.rotation, { y: (Math.PI * 2 / 8) * 4 })
+
+        .to(cassettePlayerY.rotation, { y: (Math.PI * 2 / 8) * 5 })
+        
+        .to(cassettePlayerY.rotation, { y: (Math.PI * 2 / 8) * 6 })
+
+        .to(cassettePlayerY.rotation, { y: (Math.PI * 2 / 8) * 7 })
 
         .to(cassettePlayerY.rotation, { y: Math.PI * 2 })
 
-        .to(cassettePlayerX.position, { y: 2 })
-        .to(cassettePlayerX.position, { y: 4 })
+        .to(cassettePlayerX.position, { y: 3 })
 
       ScrollTrigger.create({
          trigger: "#warmth",
@@ -205,41 +225,52 @@ Objects
             }
          }
       })
-
-      const timeLine2 = gsap.timeline({
-         scrollTrigger: {
-            trigger: '#timeLine2',
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: true,
-            markers: true,
-            onEnter: function() {
-               if (cassettePlayerX) {
-                  gsap.set(cassettePlayerX.position, { y: -4 })
-                  gsap.set(cassettePlayerY.rotation, { x: 0, y: 0, z: 0})
-                  gsap.set(cassettePlayerX.rotation, { x: 0, y: 0, z: 0})
-               }
-            },
-            onLeaveBack: function() {
-               if (cassettePlayerX) {
-                  gsap.set(cassettePlayerX.position, { x: 0, y: 4, z: 0 })
-                  gsap.set(cassettePlayerX.rotation, { x: 0, y: 0, z: 0 })
-                  gsap.set(cassettePlayerY.rotation, { x: 0, y: 0, z: 0 })
-               }
-            }
-         }
-      }).to(cassettePlayerX.position, { y: 2 })
-        .to(cassettePlayerX.position, { y: 4 })
    }
+
+   gsap.to("#ritual-image", {
+   opacity: 1,
+   duration: 1.2,
+   ease: "power2.out",
+   scrollTrigger: {
+      trigger: "#ritual",
+      start: "top 20%", 
+      toggleActions: "play none none reverse"
+   }
+   })
+
+   gsap.fromTo("#analog h2", {
+      opacity: 0,     // невидимый
+      scale: 0.85,    // чуть уменьшенный
+      z: -150         // как будто отодвинут назад
+   }, {
+      opacity: 1,     // проявляется
+      scale: 1,       // возвращается к норме
+      z: 0,           // выезжает «из глубины»
+      duration: 1.5,
+      ease: "power2.out",
+      scrollTrigger: {
+         trigger: "#analog h2",
+         start: "top 70%",     // анимация начнётся, когда заголовок окажется внизу экрана
+         toggleActions: "play none none reverse"
+      }
+   })
+
+   ScrollTrigger.create({
+   trigger: "#ritual",
+   start: "top top",
+   end: "bottom bottom",
+   pin: "#ritual-image",
+   pinSpacing: false
+   })
    
 /* 
 Light 
 */
-   const directionalLight = new THREE.DirectionalLight(0xffffff, 5)
+   const directionalLight = new THREE.DirectionalLight(0xffffff, 2)
    directionalLight.position.set(1, 3, 2)
    scene.add(directionalLight)
 
-   const ambientLight = new THREE.AmbientLight(0xffffff, 7)
+   const ambientLight = new THREE.AmbientLight(0xffffff, 4)
    scene.add(ambientLight)
 
 /* 

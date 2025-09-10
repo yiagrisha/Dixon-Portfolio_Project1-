@@ -66,3 +66,12 @@ function updateActiveStillP() {
 window.addEventListener('scroll', updateActiveStillP)
 window.addEventListener('resize', updateActiveStillP)
 updateActiveStillP()
+
+
+
+const button = document.querySelector("#finalle-button")
+const transit = document.querySelector("#transit")
+
+button.addEventListener("click", () => {
+   transit.classList.toggle("open")
+})
